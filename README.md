@@ -1,4 +1,4 @@
-# CoreX — UR5e Digital Twin
+# CoreX - AI-Driven Digital Twin Framework for Predictive Maintenance and Operational Optimization in Industrial Robotic Systems
 
 <div align="center">
 
@@ -8,7 +8,7 @@
 ![MQTT](https://img.shields.io/badge/MQTT-Mosquitto-purple?style=for-the-badge)
 
 **Real-time Digital Twin for a UR5e Robotic Arm**  
-Graduation Project — Embedded Systems Team
+Graduation Project — Digital Twin Team
 
 </div>
 
@@ -179,8 +179,8 @@ python ur5e_publisher_v2.py
 
 ## 👥 Team
 
-**CoreX — Embedded Systems**  
-Graduation Project · 2025
+**CoreX - Digital Twin**  
+Graduation Project · 2026
 
 ---
 

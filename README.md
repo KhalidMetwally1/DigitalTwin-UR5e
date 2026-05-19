@@ -16,8 +16,9 @@ Graduation Project — Digital Twin Team
 
 ## 📌 Overview
 
-CoreX is a real-time Digital Twin system for a **Universal Robots UR5e** robotic arm.  
-It streams live joint data from a **Raspberry Pi** over **MQTT**, visualizes the robot in a **Unity 3D** environment, and displays a full monitoring dashboard including joint health, temperature, current, torque, position tracking, and **Remaining Useful Life (RUL)** per joint.
+CoreX provides a scalable and industry-ready approach for predictive maintenance using Digital Twin and AI technologies. By combining non-invasive hardware, high-fidelity modeling, advanced analytics, and industrial compatibility, the system bridges a critical gap between theoretical predictive systems and practical deployment. The modularity of the system enables adoption by both large-scale factories and smaller facilities lacking centralized monitoring infrastructure.
+
+This repo includes the real-time Digital Twin system for a **Universal Robots UR5e** robotic arm. It streams live joint data from a **Raspberry Pi** over **MQTT**, visualizes the robot in a **Unity 3D** environment, and displays a full monitoring dashboard including joint health, temperature, current, torque, position tracking, and **Remaining Useful Life (RUL)** per joint.
 
 ---
 

@@ -1,4 +1,4 @@
-# CoreX - AI-Driven Digital Twin Framework for Predictive Maintenance and Operational Optimization in Industrial Robotic Systems
+# CoreX - AI-Driven Digital Twin Framework for Predictive Maintenance in Industrial Robotic Systems
 
 <div align="center">
 

@@ -1,0 +1,278 @@
+<ui:UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ui="UnityEngine.UIElements"
+    xmlns:uie="UnityEditor.UIElements"
+    xsi:noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd"
+>
+    <Style src="../USS/Dashboard.uss"/>
+    <ui:VisualElement name="root" class="root">
+
+        <!-- ═══ STATUS BAR ═══ -->
+        <ui:VisualElement name="status-bar" class="status-bar">
+            <ui:Label name="title-label" text="CoreX — UR5e Digital Twin" class="title-label"/>
+            <ui:VisualElement class="status-group">
+                <ui:VisualElement class="status-pill green">
+                    <ui:Label name="robot-mode-label" text="● RUNNING" class="status-text"/>
+                </ui:VisualElement>
+                <ui:VisualElement class="status-pill gray">
+                    <ui:Label name="timestamp-label" text="00:00:00" class="status-text"/>
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <!-- ═══ MAIN CONTENT ═══ -->
+        <ui:VisualElement name="main-content" class="main-content">
+
+            <!-- ── LEFT COLUMN ── -->
+            <ui:VisualElement name="left-col" class="column">
+
+                <!-- Panel 2: Joint Temperatures -->
+                <ui:VisualElement class="panel">
+                    <ui:Label text="Joint Temperatures" class="panel-title"/>
+                    <ui:VisualElement class="joint-row">
+                        <ui:Label text="J1" class="joint-label"/>
+                        <ui:VisualElement class="bar-bg">
+                            <ui:VisualElement name="temp-bar-0" class="bar-fill temp-normal"/>
+                        </ui:VisualElement>
+                        <ui:Label name="temp-val-0" text="26.4°C" class="joint-value"/>
+                    </ui:VisualElement>
+                    <ui:VisualElement class="joint-row">
+                        <ui:Label text="J2" class="joint-label"/>
+                        <ui:VisualElement class="bar-bg">
+                            <ui:VisualElement name="temp-bar-1" class="bar-fill temp-normal"/>
+                        </ui:VisualElement>
+                        <ui:Label name="temp-val-1" text="26.5°C" class="joint-value"/>
+                    </ui:VisualElement>
+                    <ui:VisualElement class="joint-row">
+                        <ui:Label text="J3" class="joint-label"/>
+                        <ui:VisualElement class="bar-bg">
+                            <ui:VisualElement name="temp-bar-2" class="bar-fill temp-normal"/>
+                        </ui:VisualElement>
+                        <ui:Label name="temp-val-2" text="26.8°C" class="joint-value"/>
+                    </ui:VisualElement>
+                    <ui:VisualElement class="joint-row">
+                        <ui:Label text="J4" class="joint-label"/>
+                        <ui:VisualElement class="bar-bg">
+                            <ui:VisualElement name="temp-bar-3" class="bar-fill temp-warn"/>
+                        </ui:VisualElement>
+                        <ui:Label name="temp-val-3" text="31.3°C" class="joint-value"/>
+                    </ui:VisualElement>
+                    <ui:VisualElement class="joint-row">
+                        <ui:Label text="J5" class="joint-label"/>
+                        <ui:VisualElement class="bar-bg">
+                            <ui:VisualElement name="temp-bar-4" class="bar-fill temp-warn"/>
+                        </ui:VisualElement>
+                        <ui:Label name="temp-val-4" text="34.1°C" class="joint-value"/>
+                    </ui:VisualElement>
+                    <ui:VisualElement class="joint-row">
+                        <ui:Label text="J6" class="joint-label"/>
+                        <ui:VisualElement class="bar-bg">
+                            <ui:VisualElement name="temp-bar-5" class="bar-fill temp-warn"/>
+                        </ui:VisualElement>
+                        <ui:Label name="temp-val-5" text="35.2°C" class="joint-value"/>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+
+                <!-- Panel 3: Current & Torque -->
+                <ui:VisualElement class="panel">
+                    <ui:Label text="Current &amp; Torque" class="panel-title"/>
+                    <ui:VisualElement class="stat-row">
+                        <ui:Label text="Actual Current" class="stat-label"/>
+                        <ui:Label name="current-val" text="0.25 A" class="stat-value"/>
+                    </ui:VisualElement>
+                    <ui:VisualElement class="stat-row">
+                        <ui:Label text="Target Current" class="stat-label"/>
+                        <ui:Label name="target-current-val" text="0.00 A" class="stat-value"/>
+                    </ui:VisualElement>
+                    <ui:VisualElement class="stat-row">
+                        <ui:Label text="Torque (J2)" class="stat-label"/>
+                        <ui:Label name="torque-val" text="-8.99 Nm" class="stat-value"/>
+                    </ui:VisualElement>
+                    <ui:VisualElement class="divider"/>
+                    <ui:VisualElement class="stat-row">
+                        <ui:Label text="Current Error" class="stat-label"/>
+                        <ui:Label name="current-error" text="0.25 A" class="stat-value warn"/>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+
+            </ui:VisualElement>
+
+            <!-- ── CENTER COLUMN (Digital Twin) ── -->
+            <ui:VisualElement name="center-col" class="center-column">
+                <ui:Label text="UR5e Digital Twin" class="panel-title center-title"/>
+                <ui:VisualElement name="twin-viewport" class="twin-viewport">
+                    <ui:Label class="viewport-hint"/>
+                </ui:VisualElement>
+                <!-- TCP Pose -->
+                <ui:VisualElement class="tcp-row">
+                    <ui:VisualElement class="tcp-item">
+                        <ui:Label text="X" class="tcp-axis"/>
+                        <ui:Label name="tcp-x" text="-0.376" class="tcp-val"/>
+                    </ui:VisualElement>
+                    <ui:VisualElement class="tcp-item">
+                        <ui:Label text="Y" class="tcp-axis"/>
+                        <ui:Label name="tcp-y" text="-0.058" class="tcp-val"/>
+                    </ui:VisualElement>
+                    <ui:VisualElement class="tcp-item">
+                        <ui:Label text="Z" class="tcp-axis"/>
+                        <ui:Label name="tcp-z" text="0.340" class="tcp-val"/>
+                    </ui:VisualElement>
+                    <ui:VisualElement class="tcp-item">
+                        <ui:Label text="RX" class="tcp-axis"/>
+                        <ui:Label name="tcp-rx" text="-2.392" class="tcp-val"/>
+                    </ui:VisualElement>
+                    <ui:VisualElement class="tcp-item">
+                        <ui:Label text="RY" class="tcp-axis"/>
+                        <ui:Label name="tcp-ry" text="-1.943" class="tcp-val"/>
+                    </ui:VisualElement>
+                    <ui:VisualElement class="tcp-item">
+                        <ui:Label text="RZ" class="tcp-axis"/>
+                        <ui:Label name="tcp-rz" text="0.074" class="tcp-val"/>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+
+            <!-- ── RIGHT COLUMN ── -->
+            <ui:VisualElement name="right-col" class="column">
+
+                <!-- Panel 5: Position Tracking -->
+                <ui:VisualElement class="panel">
+                    <ui:Label text="Position Tracking" class="panel-title"/>
+                    <ui:VisualElement class="stat-row header-row">
+                        <ui:Label text="Joint" class="col-head"/>
+                        <ui:Label text="Target" class="col-head"/>
+                        <ui:Label text="Actual" class="col-head"/>
+                        <ui:Label text="Error" class="col-head"/>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="pos-rows" class="pos-rows">
+                        <ui:VisualElement class="stat-row">
+                            <ui:Label text="J1" class="col-cell"/>
+                            <ui:Label name="tq-0" text="-0.208" class="col-cell"/>
+                            <ui:Label name="aq-0" text="-0.208" class="col-cell"/>
+                            <ui:Label name="eq-0" text="0.000" class="col-cell ok"/>
+                        </ui:VisualElement>
+                        <ui:VisualElement class="stat-row">
+                            <ui:Label text="J2" class="col-cell"/>
+                            <ui:Label name="tq-1" text="-1.936" class="col-cell"/>
+                            <ui:Label name="aq-1" text="-1.936" class="col-cell"/>
+                            <ui:Label name="eq-1" text="0.000" class="col-cell ok"/>
+                        </ui:VisualElement>
+                        <ui:VisualElement class="stat-row">
+                            <ui:Label text="J3" class="col-cell"/>
+                            <ui:Label name="tq-2" text="1.956" class="col-cell"/>
+                            <ui:Label name="aq-2" text="1.956" class="col-cell"/>
+                            <ui:Label name="eq-2" text="0.000" class="col-cell ok"/>
+                        </ui:VisualElement>
+                        <ui:VisualElement class="stat-row">
+                            <ui:Label text="J4" class="col-cell"/>
+                            <ui:Label name="tq-3" text="-1.666" class="col-cell"/>
+                            <ui:Label name="aq-3" text="-1.666" class="col-cell"/>
+                            <ui:Label name="eq-3" text="0.000" class="col-cell ok"/>
+                        </ui:VisualElement>
+                        <ui:VisualElement class="stat-row">
+                            <ui:Label text="J5" class="col-cell"/>
+                            <ui:Label name="tq-4" text="-1.566" class="col-cell"/>
+                            <ui:Label name="aq-4" text="-1.566" class="col-cell"/>
+                            <ui:Label name="eq-4" text="0.000" class="col-cell ok"/>
+                        </ui:VisualElement>
+                        <ui:VisualElement class="stat-row">
+                            <ui:Label text="J6" class="col-cell"/>
+                            <ui:Label name="tq-5" text="0.002" class="col-cell"/>
+                            <ui:Label name="aq-5" text="0.002" class="col-cell"/>
+                            <ui:Label name="eq-5" text="0.000" class="col-cell ok"/>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+
+                <!-- Panel 6: Alerts -->
+                <ui:VisualElement class="panel">
+                    <ui:Label text="Anomaly Alerts" class="panel-title"/>
+                    <ui:VisualElement name="alerts-container" class="alerts-container">
+                        <ui:Label text="No anomalies detected" class="no-alerts"/>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <!-- ═══ BOTTOM ROW: RUL + Maintenance ═══ -->
+        <ui:VisualElement name="bottom-row" class="bottom-row">
+
+            <!-- Panel 7: RUL per Joint -->
+            <ui:VisualElement class="panel panel-bottom">
+                <ui:Label text="Remaining Useful Life — per Joint" class="panel-title"/>
+                <ui:VisualElement class="rul-grid">
+                    <ui:VisualElement class="rul-item">
+                        <ui:Label text="J1" class="rul-label"/>
+                        <ui:VisualElement class="rul-bar-bg">
+                            <ui:VisualElement name="rul-bar-0" class="rul-bar rul-good"/>
+                        </ui:VisualElement>
+                        <ui:Label name="rul-val-0" text="92%" class="rul-pct good"/>
+                    </ui:VisualElement>
+                    <ui:VisualElement class="rul-item">
+                        <ui:Label text="J2" class="rul-label"/>
+                        <ui:VisualElement class="rul-bar-bg">
+                            <ui:VisualElement name="rul-bar-1" class="rul-bar rul-good"/>
+                        </ui:VisualElement>
+                        <ui:Label name="rul-val-1" text="88%" class="rul-pct good"/>
+                    </ui:VisualElement>
+                    <ui:VisualElement class="rul-item">
+                        <ui:Label text="J3" class="rul-label"/>
+                        <ui:VisualElement class="rul-bar-bg">
+                            <ui:VisualElement name="rul-bar-2" class="rul-bar rul-good"/>
+                        </ui:VisualElement>
+                        <ui:Label name="rul-val-2" text="85%" class="rul-pct good"/>
+                    </ui:VisualElement>
+                    <ui:VisualElement class="rul-item">
+                        <ui:Label text="J4" class="rul-label"/>
+                        <ui:VisualElement class="rul-bar-bg">
+                            <ui:VisualElement name="rul-bar-3" class="rul-bar rul-warn"/>
+                        </ui:VisualElement>
+                        <ui:Label name="rul-val-3" text="61%" class="rul-pct warn"/>
+                    </ui:VisualElement>
+                    <ui:VisualElement class="rul-item">
+                        <ui:Label text="J5" class="rul-label"/>
+                        <ui:VisualElement class="rul-bar-bg">
+                            <ui:VisualElement name="rul-bar-4" class="rul-bar rul-warn"/>
+                        </ui:VisualElement>
+                        <ui:Label name="rul-val-4" text="54%" class="rul-pct warn"/>
+                    </ui:VisualElement>
+                    <ui:VisualElement class="rul-item">
+                        <ui:Label text="J6" class="rul-label"/>
+                        <ui:VisualElement class="rul-bar-bg">
+                            <ui:VisualElement name="rul-bar-5" class="rul-bar rul-danger"/>
+                        </ui:VisualElement>
+                        <ui:Label name="rul-val-5" text="32%" class="rul-pct danger"/>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+
+            <!-- Panel 8: Maintenance Schedule -->
+            <ui:VisualElement class="panel panel-bottom">
+                <ui:Label text="Maintenance Schedule" class="panel-title"/>
+                <ui:VisualElement class="maint-row urgent">
+                    <ui:Label text="⚠" class="maint-icon"/>
+                    <ui:Label text="Joint 6" class="maint-joint"/>
+                    <ui:Label text="Immediate — RUL 32%" class="maint-desc"/>
+                </ui:VisualElement>
+                <ui:VisualElement class="maint-row warning">
+                    <ui:Label text="!" class="maint-icon"/>
+                    <ui:Label text="Joint 5" class="maint-joint"/>
+                    <ui:Label text="Soon — RUL 54%" class="maint-desc"/>
+                </ui:VisualElement>
+                <ui:VisualElement class="maint-row warning">
+                    <ui:Label text="!" class="maint-icon"/>
+                    <ui:Label text="Joint 4" class="maint-joint"/>
+                    <ui:Label text="Monitor — RUL 61%" class="maint-desc"/>
+                </ui:VisualElement>
+                <ui:VisualElement class="maint-row ok">
+                    <ui:Label text="✓" class="maint-icon"/>
+                    <ui:Label text="J1, J2, J3" class="maint-joint"/>
+                    <ui:Label text="Healthy — No action needed" class="maint-desc"/>
+                </ui:VisualElement>
+            </ui:VisualElement>
+
+        </ui:VisualElement>
+
+    </ui:VisualElement>
+</ui:UXML>

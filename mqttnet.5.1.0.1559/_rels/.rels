@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+  <Relationship Type="http://schemas.microsoft.com/packaging/2010/07/manifest" Target="/MQTTnet.nuspec" Id="RC0FA6C442B915542" />
+  <Relationship Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" Target="/package/services/metadata/core-properties/996d614b5bde40de9fefa05426f05422.psmdcp" Id="R1557B8313DDB97F1" />
+</Relationships>

@@ -6,6 +6,7 @@
 ![Unity](https://img.shields.io/badge/Unity-6.4-black?style=for-the-badge&logo=unity)
 ![Python](https://img.shields.io/badge/Python-3.14-blue?style=for-the-badge&logo=python)
 ![MQTT](https://img.shields.io/badge/MQTT-Mosquitto-purple?style=for-the-badge)
+![HiveMQ](https://img.shields.io/badge/HiveMQ-Cloud-yellow?style=for-the-badge)
 
 **Real-time Digital Twin for a UR5e Robotic Arm**  
 Graduation Project — Digital Twin Team
@@ -25,25 +26,27 @@ This repo includes the real-time Digital Twin system for a **Universal Robots UR
 ## 🗂️ Repository Structure
 
 ```
-CoreX/
+DigitalTwin-UR5e/
 │
-├── 📁 Unity/                          # Unity C# Scripts
-│   ├── RobotController.cs             # Controls 6-DOF joint motion via ArticulationBody
-│   ├── MqttRobotController.cs         # MQTT subscriber — receives & parses robot data
-│   ├── UnityMainThreadDispatcher.cs   # Thread-safe dispatcher for MQTT callbacks
-│   ├── DashboardController.cs         # Binds live data to Unity UI Toolkit dashboard
-│   │
-│   └── 📁 docs/
-│       ├── RobotController.md         # Full documentation — RobotController.cs
-│       ├── MqttRobotController.md     # Full documentation — MqttRobotController.cs
-│       ├── UnityMainThreadDispatcher.md
-│       └── DashboardController.md
+├── 📁 mqttnet.5.1.0.1559/             # MQTTnet Library (HiveMQ Cloud Support)
 │
 ├── 📁 Python/                         # Python Scripts
-│   ├── ur5e_publisher_v2.py           # Simulated UR5e data publisher over MQTT
-│   │
-│   └── 📁 docs/
-│       └── ur5e_publisher_v2.md       # Full documentation — publisher script
+│   ├── ur5e_rtde_to_hivemq.py         # Reads live UR5e data via RTDE → publishes to HiveMQ Cloud
+│   └── ur5e_simulator.py              # Simulates UR5e data for testing (no real robot needed)
+│
+├── 📁 UI/                             # Dashboard UI Files
+│   ├── 📁 USS/                        # Stylesheets (CoreX Light Theme)
+│   ├── 📁 UXML/                       # Dashboard layout and structure
+│   └── 📁 Scripts/                    # UI data-binding C# scripts
+│
+├── 📁 Unity/                          # Unity C# Scripts
+│   ├── MqttDashboardReceiver.cs       # Receives data from HiveMQ Cloud → feeds dashboard & robot
+│   └── RobotController.cs            # Controls 6-DOF joint motion via ArticulationBody
+│
+├── 📁 URDF and Meshes/                # UR5e 3D Model
+│   ├── ur5e_fixed.urdf                # URDF with corrected mesh paths for Unity import
+│   └── meshes/                        # Visual (.dae) and collision (.stl) mesh files
+│                                      # with custom materials (silver body + blue joints)
 │
 └── README.md                          # This file
 ```
@@ -61,25 +64,77 @@ CoreX/
                         ▼
 ┌─────────────────────────────────────────────────────────┐
 │                   Raspberry Pi                           │
-│          Python RTDE → MQTT Publisher                    │
+│            ur5e_rtde_to_hivemq.py                        │
 └───────────────────────┬─────────────────────────────────┘
-                        │ MQTT  topic: corex/ur5e/data
+                        │ MQTT over TLS (port 8883)
                         ▼
 ┌─────────────────────────────────────────────────────────┐
-│              Mosquitto MQTT Broker                       │
-│                  localhost:1883                          │
+│                 HiveMQ Cloud Broker                      │
+│              topic: corex/ur5e/data                      │
 └───────────────────────┬─────────────────────────────────┘
                         │
                         ▼
 ┌─────────────────────────────────────────────────────────┐
 │                   Unity 6.4                              │
 │                                                          │
-│  MqttRobotController  ──►  RobotController              │
-│          │                  (3D arm moves)               │
-│          └──────────────►  DashboardController           │
+│  MqttDashboardReceiver ──►  RobotController             │
+│          │                   (3D arm moves)              │
+│          └─────────────►  DashboardController            │
 │                             (UI panels update)           │
 └─────────────────────────────────────────────────────────┘
 ```
+
+---
+
+## 📦 Components
+
+### 1. `mqttnet.5.1.0.1559/` — MQTTnet Library
+The **MQTTnet** library (v5.1.0) is included directly in the repository to enable **TLS-secured MQTT communication** with HiveMQ Cloud from within Unity. Unlike the standard M2Mqtt library, MQTTnet fully supports SSL/TLS on port 8883, which is required for cloud broker connections.
+
+---
+
+### 2. `Python/` — Data Publisher & Simulator
+
+| File | Purpose |
+|------|---------|
+| `ur5e_rtde_to_hivemq.py` | Connects to the real UR5e robot via **RTDE protocol** over Ethernet, reads live joint data (positions, velocities, currents, temperatures, TCP pose, robot mode), and publishes it to **HiveMQ Cloud** over MQTT with TLS. This is the script that runs on the Raspberry Pi next to the robot. |
+| `ur5e_simulator.py` | Generates realistic simulated UR5e data using sine waves — mimicking smooth robot motion — and publishes it to HiveMQ Cloud in the exact same JSON format. Used for testing the full pipeline without a physical robot. |
+
+**Dependencies:**
+```bash
+pip install paho-mqtt ur-rtde
+```
+
+---
+
+### 3. `UI/` — Dashboard Interface
+
+The dashboard is built with **Unity UI Toolkit** and split into three layers:
+
+| Folder | Contents |
+|--------|---------|
+| `USS/` | CoreX Light Theme stylesheet — defines colors (`#005CFF` primary), panel borders, temperature/RUL color thresholds, and layout |
+| `UXML/` | Dashboard structure with 8 panels: Status Bar, Joint Temperatures, Current & Torque, UR5e Digital Twin viewport, TCP Pose, Position Tracking, Anomaly Alerts, RUL per Joint, and Maintenance Schedule |
+| `Scripts/` | C# data-binding scripts that connect incoming MQTT data to the UI elements in real-time |
+
+---
+
+### 4. `Unity/` — Unity C# Scripts
+
+| File | Purpose |
+|------|---------|
+| `MqttDashboardReceiver.cs` | Subscribes to the HiveMQ Cloud broker via TLS (port 8883), receives the JSON robot data, parses all fields, and distributes them to `RobotController` (to move the 3D arm) and `DashboardController` (to update all dashboard panels). Handles thread-safety via the main thread dispatcher. |
+| `RobotController.cs` | Receives joint angles from `MqttDashboardReceiver` and applies them to the UR5e 3D model using Unity's **ArticulationBody** physics system, enabling real-time synchronized motion between the physical robot and its digital twin. |
+
+---
+
+### 5. `URDF and Meshes/` — UR5e 3D Model
+
+Contains the complete 3D model of the UR5e robotic arm, ready for direct import into Unity:
+
+- **`ur5e_fixed.urdf`** — The official Universal Robots URDF with mesh paths corrected from ROS `package://` format to relative paths compatible with Unity's URDF Importer.
+- **`meshes/`** — Visual (`.dae`) and collision (`.stl`) mesh files for all 6 links: base, shoulder, upper arm, forearm, and wrists 1–3.
+- **Custom materials** — Robot appearance has been tuned to match the real UR5e: silver metallic body, blue joint caps, and dark grey joint rings.
 
 ---
 
@@ -90,26 +145,30 @@ CoreX/
 | Tool | Version | Purpose |
 |------|---------|---------|
 | Unity Hub + Unity | 6.4 (6000.4.5f1) | Main development environment |
-| Python | 3.14+ | Data publisher / Pi script |
-| Mosquitto | Latest | MQTT Broker |
+| Python | 3.14+ | Data publisher / simulator |
 | paho-mqtt | 2.1.0 | Python MQTT library |
-| Git | Latest | Version control |
+| HiveMQ Cloud account | Free tier | Cloud MQTT broker |
 
-### 1. Start the MQTT Broker
-```bash
-net start mosquitto
-```
-
-### 2. Run the Data Publisher (simulation)
+### 1. Run the Simulator (no robot needed)
 ```bash
 cd Python/
-python ur5e_publisher_v2.py
+# Set your HiveMQ credentials in the script first
+python ur5e_simulator.py
+```
+
+### 2. Run with Real Robot (Raspberry Pi)
+```bash
+cd Python/
+# Set robot IP and HiveMQ credentials in the script
+python ur5e_rtde_to_hivemq.py
 ```
 
 ### 3. Open Unity Project
-- Open `Unity/` folder in Unity Hub
+- Import `URDF and Meshes/ur5e_fixed.urdf` using the URDF Importer package
+- Copy `Unity/` scripts to `Assets/Scripts/`
+- Copy `UI/` folder to `Assets/UI/`
+- Set HiveMQ credentials in `MqttDashboardReceiver.cs` Inspector fields
 - Press **Play ▶️**
-- Dashboard and 3D arm will start updating automatically
 
 ---
 
@@ -186,5 +245,5 @@ Graduation Project · 2026
 ---
 
 <div align="center">
-<sub>Built with Unity 6.4 · Python 3.14 · MQTT · UR5e RTDE</sub>
+<sub>Built with Unity 6.4 · Python 3.14 · MQTTnet · HiveMQ Cloud · UR5e RTDE</sub>
 </div>
